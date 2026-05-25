@@ -26,10 +26,17 @@ function signalStatusLabel(status: "active" | "matched" | "expired"): string {
   return "만료됨";
 }
 
+function daysUntil(isoDate: string): number {
+  const diffMs = new Date(isoDate).getTime() - Date.now();
+
+  return Math.max(0, Math.ceil(diffMs / 86400000));
+}
+
 export default function SignalDetailScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
   const { signal, status, error, reload } = useSignalDetail(id);
+  const remainDays = signal ? daysUntil(signal.expiresAt) : null;
 
   return (
     <ScreenContainer title="신호 상세" subtitle="선택한 마음의 상태와 힌트를 확인합니다.">
@@ -92,6 +99,11 @@ export default function SignalDetailScreen() {
             <AppText tone={signal.status === "matched" ? "success" : "info"}>
               {signalStatusLabel(signal.status)}
             </AppText>
+            {remainDays !== null ? (
+              <AppText tone={signal.status === "expired" ? "danger" : "muted"}>
+                유효기간: D-{remainDays}일
+              </AppText>
+            ) : null}
           </View>
 
           <AppText variant="caption" tone="muted">
