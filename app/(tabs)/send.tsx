@@ -25,6 +25,7 @@ export default function SendScreen() {
   const { schoolmates, status, error, reload } = useSchoolmates(searchText);
   const typedMessageLength = message.length;
   const isMessageReady = message.trim().length > 0;
+  const quickMessages = ["오늘 수업 어땠어?", "발표할 때 멋있었어", "카톡으로 안부 좀 물어봐도 될까?"];
 
   const messageError = useMemo(() => {
     if (!validationError) {
@@ -149,6 +150,26 @@ export default function SendScreen() {
         error={messageError}
         style={{ minHeight: 92, textAlignVertical: "top" }}
       />
+      <View style={{ gap: 10 }}>
+        <AppText variant="caption" tone="muted">
+          빠른 작성 예시
+        </AppText>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          {quickMessages.map((template) => (
+            <PrimaryButton
+              key={template}
+              label={template}
+              variant="secondary"
+              onPress={() => {
+                setMessage(template);
+                if (validationError) {
+                  setValidationError(null);
+                }
+              }}
+            />
+          ))}
+        </View>
+      </View>
       <View style={{ alignItems: "flex-end", marginTop: -4 }}>
         <AppText
           variant="caption"
