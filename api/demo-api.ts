@@ -55,12 +55,19 @@ export function isDemoApiError(error: unknown): error is DemoApiError {
 export async function getHomeFeed(mode: ApiMode): Promise<HomeFeed> {
   await wait();
   ensureApiAvailable(mode);
+  const loadedAt = new Date().toISOString();
 
   if (mode === "empty") {
-    return emptyFeed();
+    return {
+      ...emptyFeed(),
+      loadedAt
+    };
   }
 
-  return clone(demoDb);
+  return {
+    ...clone(demoDb),
+    loadedAt
+  };
 }
 
 export async function getSchoolmates(
@@ -168,5 +175,8 @@ export async function getSignalDetail(
 export async function resetDemoDatabase(): Promise<HomeFeed> {
   await wait(260);
   demoDb = createInitialFeed();
-  return clone(demoDb);
+  return {
+    ...clone(demoDb),
+    loadedAt: new Date().toISOString()
+  };
 }

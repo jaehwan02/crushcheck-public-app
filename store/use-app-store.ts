@@ -26,6 +26,7 @@ type AppState = {
   sendStatus: LoadStatus;
   sendError: string | null;
   lastCreatedSignalId: string | null;
+  lastLoadedAt: string | null;
   setDemoMode: (mode: ApiMode) => void;
   loadFeed: () => Promise<void>;
   sendSignal: (input: SendSignalInput) => Promise<Signal>;
@@ -55,6 +56,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   sendStatus: "idle",
   sendError: null,
   lastCreatedSignalId: null,
+  lastLoadedAt: null,
 
   setDemoMode: (mode) => {
     set({ demoMode: mode, loadError: null, sendError: null });
@@ -70,6 +72,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         receivedSignals: feed.receivedSignals,
         sentSignals: feed.sentSignals,
         tokenBalance: feed.tokenBalance,
+        lastLoadedAt: feed.loadedAt,
         loadStatus: "success"
       });
     } catch (error) {
@@ -109,6 +112,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       receivedSignals: feed.receivedSignals,
       sentSignals: feed.sentSignals,
       tokenBalance: feed.tokenBalance,
+      lastLoadedAt: feed.loadedAt,
       loadStatus: "success",
       lastCreatedSignalId: null
     });

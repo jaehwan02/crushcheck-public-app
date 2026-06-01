@@ -36,6 +36,7 @@ export type HomeFeed = {
   receivedSignals: Signal[];
   sentSignals: Signal[];
   tokenBalance: number;
+  loadedAt: string;
 };
 
 export type SendSignalInput = {
