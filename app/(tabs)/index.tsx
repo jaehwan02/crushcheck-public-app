@@ -17,10 +17,20 @@ export default function HomeScreen() {
   const loadStatus = useAppStore((state) => state.loadStatus);
   const loadError = useAppStore((state) => state.loadError);
   const loadFeed = useAppStore((state) => state.loadFeed);
+  const lastLoadedAt = useAppStore((state) => state.lastLoadedAt);
 
   const isLoading = loadStatus === "loading";
   const isEmpty = receivedSignals.length === 0 && sentSignals.length === 0;
   const isTokenLow = tokenBalance <= 1;
+  const lastLoadedLabel = lastLoadedAt
+    ? new Intl.DateTimeFormat("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(new Date(lastLoadedAt))
+    : "없음";
 
   return (
     <ScreenContainer
@@ -42,6 +52,9 @@ export default function HomeScreen() {
         <AppText variant="subtitle">오늘의 상태</AppText>
         <AppText tone="muted">
           받은 마음 {receivedSignals.length}개, 보낸 마음 {sentSignals.length}개를 확인할 수 있습니다.
+        </AppText>
+        <AppText tone="muted" selectable>
+          마지막 갱신: {lastLoadedLabel}
         </AppText>
       </View>
 
