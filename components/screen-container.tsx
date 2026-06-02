@@ -11,6 +11,12 @@ type Props = {
   children: ReactNode;
   refreshing?: boolean;
   onRefresh?: () => void;
+  contentContainerStyle?: {
+    paddingHorizontal?: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+    gap?: number;
+  };
 };
 
 export function ScreenContainer({
@@ -18,7 +24,8 @@ export function ScreenContainer({
   subtitle,
   children,
   refreshing = false,
-  onRefresh
+  onRefresh,
+  contentContainerStyle
 }: Props) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.color.bg }} edges={["top"]}>
@@ -33,7 +40,8 @@ export function ScreenContainer({
           paddingHorizontal: theme.spacing.screenX,
           paddingTop: 18,
           paddingBottom: 120,
-          gap: 18
+          gap: 18,
+          ...contentContainerStyle
         }}
       >
         <View style={{ gap: 6 }}>
