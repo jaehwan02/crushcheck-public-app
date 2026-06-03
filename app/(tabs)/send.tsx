@@ -24,6 +24,7 @@ export default function SendScreen() {
   const sendError = useAppStore((state) => state.sendError);
   const { schoolmates, status, error, reload } = useSchoolmates(searchText);
   const typedMessageLength = message.length;
+  const isMessageReady = message.trim().length > 0;
 
   const messageError = useMemo(() => {
     if (!validationError) {
@@ -122,6 +123,17 @@ export default function SendScreen() {
         </View>
       ) : null}
 
+      {selected ? (
+        <View style={{ gap: 8 }}>
+          <AppText tone="muted">현재 선택: {selected.displayName}</AppText>
+          <PrimaryButton
+            label="선택 해제"
+            variant="secondary"
+            onPress={() => setSelected(null)}
+          />
+        </View>
+      ) : null}
+
       <FormField
         label="마음 메시지"
         value={message}
@@ -155,7 +167,7 @@ export default function SendScreen() {
       <PrimaryButton
         label={selected ? `${selected.displayName}에게 보내기` : "친구를 선택해주세요"}
         loading={sendStatus === "loading"}
-        disabled={!selected}
+        disabled={!selected || !isMessageReady}
         onPress={handleSubmit}
       />
     </ScreenContainer>
