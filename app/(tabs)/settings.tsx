@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Pressable, View } from "react-native";
 
 import { AppText } from "@/components/app-text";
@@ -66,6 +67,7 @@ export default function SettingsScreen() {
   const setDemoMode = useAppStore((state) => state.setDemoMode);
   const resetDemo = useAppStore((state) => state.resetDemo);
   const loadStatus = useAppStore((state) => state.loadStatus);
+  const currentMode = useMemo(() => modes.find((mode) => mode.value === demoMode), [demoMode]);
 
   return (
     <ScreenContainer
@@ -100,9 +102,12 @@ export default function SettingsScreen() {
         }}
       >
         <AppText variant="subtitle">현재 모드</AppText>
-        <AppText tone="muted">
-          {modes.find((mode) => mode.value === demoMode)?.description}
-        </AppText>
+        <View style={{ gap: 4 }}>
+          <AppText tone="muted">
+            {currentMode?.label ?? "알 수 없음"} 모드
+          </AppText>
+          <AppText tone="muted">{currentMode?.description ?? "현재 모드를 표시할 수 없습니다."}</AppText>
+        </View>
       </View>
 
       <PrimaryButton
