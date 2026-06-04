@@ -16,9 +16,24 @@ function formatDate(iso: string): string {
   }).format(new Date(iso));
 }
 
+function signalStatusLabel(status: Signal["status"]): string {
+  if (status === "active") {
+    return "응답 대기";
+  }
+
+  if (status === "matched") {
+    return "매칭 완료";
+  }
+
+  return "만료";
+}
+
 export function SignalCard({ signal }: Props) {
   const badgeLabel = signal.role === "receiver" ? "받은 마음" : "보낸 마음";
   const badgeColor = signal.role === "receiver" ? theme.color.info : theme.color.primary;
+  const statusColor = signal.status === "active" ? theme.color.info : theme.color.warning;
+  const dDay =
+    Math.max(0, Math.ceil((new Date(signal.expiresAt).getTime() - Date.now()) / 86400000));
 
   return (
     <Link href={`/signal/${signal.id}`} asChild>
@@ -57,6 +72,9 @@ export function SignalCard({ signal }: Props) {
           </View>
         </View>
         <AppText numberOfLines={2}>{signal.message}</AppText>
+        <AppText tone="muted" style={{ color: statusColor }}>
+          상태: {signalStatusLabel(signal.status)} / 만료 D-{dDay}
+        </AppText>
         <AppText variant="caption" tone="muted">
           {formatDate(signal.createdAt)} 생성 - {formatDate(signal.expiresAt)} 만료
         </AppText>
