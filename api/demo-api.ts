@@ -41,10 +41,13 @@ function ensureApiAvailable(mode: ApiMode): void {
 }
 
 function emptyFeed(): HomeFeed {
+  const loadedAt = new Date().toISOString();
+
   return {
     receivedSignals: [],
     sentSignals: [],
-    tokenBalance: demoDb.tokenBalance
+    tokenBalance: demoDb.tokenBalance,
+    loadedAt
   };
 }
 

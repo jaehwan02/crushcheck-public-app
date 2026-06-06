@@ -81,6 +81,7 @@ export function createInitialFeed(): HomeFeed {
   return {
     receivedSignals,
     sentSignals,
-    tokenBalance: 3
+    tokenBalance: 3,
+    loadedAt: new Date().toISOString()
   };
 }
