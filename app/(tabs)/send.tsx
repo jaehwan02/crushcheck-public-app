@@ -17,6 +17,7 @@ export default function SendScreen() {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState("");
   const [selected, setSelected] = useState<Schoolmate | null>(null);
+  const [lastUsedTemplateId, setLastUsedTemplateId] = useState<string | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const tokenBalance = useAppStore((state) => state.tokenBalance);
   const sendSignal = useAppStore((state) => state.sendSignal);
@@ -25,7 +26,19 @@ export default function SendScreen() {
   const { schoolmates, status, error, reload } = useSchoolmates(searchText);
   const typedMessageLength = message.length;
   const isMessageReady = message.trim().length > 0;
-  const quickMessages = ["오늘 수업 어땠어?", "발표할 때 멋있었어", "카톡으로 안부 좀 물어봐도 될까?"];
+  const templates = [
+    { id: "casual", label: "안부", text: "오늘 수업 어땠어?" },
+    { id: "compliment", label: "칭찬", text: "발표할 때 멋있었어" },
+    { id: "question", label: "안부질문", text: "카톡으로 안부 좀 물어봐도 될까?" }
+  ];
+
+  const applyTemplate = (templateId: string, content: string) => {
+    setMessage(content);
+    setLastUsedTemplateId(templateId);
+    if (validationError) {
+      setValidationError(null);
+    }
+  };
 
   const messageError = useMemo(() => {
     if (!validationError) {
@@ -152,20 +165,16 @@ export default function SendScreen() {
       />
       <View style={{ gap: 10 }}>
         <AppText variant="caption" tone="muted">
-          빠른 작성 예시
+          빠른 작성 템플릿
         </AppText>
+        {lastUsedTemplateId ? <AppText tone="muted">최근 템플릿 사용됨</AppText> : null}
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-          {quickMessages.map((template) => (
+          {templates.map((template) => (
             <PrimaryButton
               key={template}
-              label={template}
+              label={`${template.label}: ${template.text}`}
               variant="secondary"
-              onPress={() => {
-                setMessage(template);
-                if (validationError) {
-                  setValidationError(null);
-                }
-              }}
+              onPress={() => applyTemplate(template.id, template.text)}
             />
           ))}
         </View>
