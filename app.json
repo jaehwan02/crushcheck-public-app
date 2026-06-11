@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "CrushCheck Public Demo",
+    "slug": "crushcheck-public-demo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "crushcheck-public",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "plugins": ["expo-router"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "link.crushcheck.publicdemo"
+    },
+    "android": {
+      "package": "link.crushcheck.publicdemo"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
