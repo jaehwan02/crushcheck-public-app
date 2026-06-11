@@ -9,6 +9,7 @@ import { theme } from "@/constants/theme";
 export default function SentSuccessScreen() {
   const params = useLocalSearchParams<{ signalId?: string }>();
   const signalId = Array.isArray(params.signalId) ? params.signalId[0] : params.signalId;
+  const hasSignalId = Boolean(signalId);
 
   return (
     <ScreenContainer title="전송 완료" subtitle="마음이 홈 화면의 보낸 마음 목록에 추가되었습니다.">
@@ -31,6 +32,9 @@ export default function SentSuccessScreen() {
             signalId: {signalId}
           </AppText>
         ) : null}
+        <AppText tone="muted">
+          {hasSignalId ? "바로 상세 확인하거나 홈으로 이동해 보낸 신호를 다시 확인하세요." : "신호 생성 정보가 없을 때는 홈 화면으로 이동해 재시도할 수 있습니다."}
+        </AppText>
       </View>
 
       {signalId ? (
@@ -43,9 +47,15 @@ export default function SentSuccessScreen() {
         <PrimaryButton label="홈으로 이동" variant="secondary" />
       </Link>
 
-      {!signalId ? (
+      {hasSignalId ? (
         <Link href="/(tabs)/send" asChild>
           <PrimaryButton label="다시 보내기" variant="secondary" />
+        </Link>
+      ) : null}
+
+      {!hasSignalId ? (
+        <Link href="/(tabs)/send" asChild>
+          <PrimaryButton label="다시 시도하기" variant="danger" />
         </Link>
       ) : null}
     </ScreenContainer>
