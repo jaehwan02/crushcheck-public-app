@@ -6,13 +6,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { StateView } from "@/components/state-view";
 import { theme } from "@/constants/theme";
 import { useSignalDetail } from "@/hooks/use-signal-detail";
-
-function formatDateTime(iso: string): string {
-  return new Intl.DateTimeFormat("ko-KR", {
-    dateStyle: "medium",
-    timeStyle: "short"
-  }).format(new Date(iso));
-}
+import { daysUntil, formatDateTime } from "@/utils/date-format";
 
 function signalStatusLabel(status: "active" | "matched" | "expired"): string {
   if (status === "active") {
@@ -24,12 +18,6 @@ function signalStatusLabel(status: "active" | "matched" | "expired"): string {
   }
 
   return "만료됨";
-}
-
-function daysUntil(isoDate: string): number {
-  const diffMs = new Date(isoDate).getTime() - Date.now();
-
-  return Math.max(0, Math.ceil(diffMs / 86400000));
 }
 
 export default function SignalDetailScreen() {
