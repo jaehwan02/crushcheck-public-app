@@ -8,6 +8,7 @@ import { SignalCard } from "@/components/signal-card";
 import { StateView } from "@/components/state-view";
 import { theme } from "@/constants/theme";
 import { useAppStore } from "@/store/use-app-store";
+import { formatDateTime } from "@/utils/date-format";
 
 export default function HomeScreen() {
   const profile = useAppStore((state) => state.profile);
@@ -23,13 +24,7 @@ export default function HomeScreen() {
   const isEmpty = receivedSignals.length === 0 && sentSignals.length === 0;
   const isTokenLow = tokenBalance <= 1;
   const lastLoadedLabel = lastLoadedAt
-    ? new Intl.DateTimeFormat("ko-KR", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit"
-      }).format(new Date(lastLoadedAt))
+    ? formatDateTime(lastLoadedAt)
     : "없음";
 
   return (
