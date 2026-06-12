@@ -3,18 +3,12 @@ import { Pressable, View } from "react-native";
 
 import { AppText } from "@/components/app-text";
 import { theme } from "@/constants/theme";
+import { formatShortDate } from "@/utils/date-format";
 import type { Signal } from "@/types/demo";
 
 type Props = {
   signal: Signal;
 };
-
-function formatDate(iso: string): string {
-  return new Intl.DateTimeFormat("ko-KR", {
-    month: "short",
-    day: "numeric"
-  }).format(new Date(iso));
-}
 
 function signalStatusLabel(status: Signal["status"]): string {
   if (status === "active") {
@@ -76,7 +70,7 @@ export function SignalCard({ signal }: Props) {
           상태: {signalStatusLabel(signal.status)} / 만료 D-{dDay}
         </AppText>
         <AppText variant="caption" tone="muted">
-          {formatDate(signal.createdAt)} 생성 - {formatDate(signal.expiresAt)} 만료
+          {formatShortDate(signal.createdAt)} 생성 - {formatShortDate(signal.expiresAt)} 만료
         </AppText>
       </Pressable>
     </Link>
