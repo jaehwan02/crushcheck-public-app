@@ -171,7 +171,7 @@ export default function SendScreen() {
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {templates.map((template) => (
             <PrimaryButton
-              key={template}
+              key={template.id}
               label={`${template.label}: ${template.text}`}
               variant="secondary"
               onPress={() => applyTemplate(template.id, template.text)}
