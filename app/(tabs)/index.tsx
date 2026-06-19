@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import { View } from "react-native";
 
 import { AppText } from "@/components/app-text";
@@ -19,6 +20,7 @@ export default function HomeScreen() {
 
   const isLoading = loadStatus === "loading";
   const isEmpty = receivedSignals.length === 0 && sentSignals.length === 0;
+  const isTokenLow = tokenBalance <= 1;
 
   return (
     <ScreenContainer
@@ -63,6 +65,18 @@ export default function HomeScreen() {
           actionLabel="새로고침"
           onAction={loadFeed}
         />
+      ) : null}
+
+      {isTokenLow ? (
+        <View style={{ gap: 10 }}>
+          <AppText variant="subtitle">토큰 알림</AppText>
+          <AppText tone="muted">
+            토큰이 거의 없습니다. 더 이상의 전송을 하려면 설정에서 데모 데이터를 초기화하세요.
+          </AppText>
+          <Link href="/(tabs)/settings" asChild>
+            <PrimaryButton label="설정으로 이동" variant="secondary" />
+          </Link>
+        </View>
       ) : null}
 
       {receivedSignals.length > 0 ? (
