@@ -42,6 +42,12 @@ export default function SentSuccessScreen() {
       <Link href="/(tabs)" asChild>
         <PrimaryButton label="홈으로 이동" variant="secondary" />
       </Link>
+
+      {!signalId ? (
+        <Link href="/(tabs)/send" asChild>
+          <PrimaryButton label="다시 보내기" variant="secondary" />
+        </Link>
+      ) : null}
     </ScreenContainer>
   );
 }
