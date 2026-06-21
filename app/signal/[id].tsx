@@ -14,6 +14,18 @@ function formatDateTime(iso: string): string {
   }).format(new Date(iso));
 }
 
+function signalStatusLabel(status: "active" | "matched" | "expired"): string {
+  if (status === "active") {
+    return "응답 대기중";
+  }
+
+  if (status === "matched") {
+    return "매칭 완료";
+  }
+
+  return "만료됨";
+}
+
 export default function SignalDetailScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const id = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -78,7 +90,7 @@ export default function SignalDetailScreen() {
               상태
             </AppText>
             <AppText tone={signal.status === "matched" ? "success" : "info"}>
-              {signal.status}
+              {signalStatusLabel(signal.status)}
             </AppText>
           </View>
 
