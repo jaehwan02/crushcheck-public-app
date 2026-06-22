@@ -12,6 +12,9 @@ import { useSchoolmates } from "@/hooks/use-schoolmates";
 import { useAppStore } from "@/store/use-app-store";
 import type { Schoolmate } from "@/types/demo";
 
+const MIN_MESSAGE_LENGTH = 3;
+const MAX_MESSAGE_LENGTH = 80;
+
 export default function SendScreen() {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState("");
@@ -22,6 +25,7 @@ export default function SendScreen() {
   const sendStatus = useAppStore((state) => state.sendStatus);
   const sendError = useAppStore((state) => state.sendError);
   const { schoolmates, status, error, reload } = useSchoolmates(searchText);
+  const typedMessageLength = message.length;
 
   const messageError = useMemo(() => {
     if (!validationError) {
@@ -39,8 +43,8 @@ export default function SendScreen() {
       return;
     }
 
-    if (trimmedMessage.length < 3) {
-      setValidationError("마음 메시지는 3자 이상 입력해주세요.");
+    if (trimmedMessage.length < MIN_MESSAGE_LENGTH) {
+      setValidationError(`마음 메시지는 ${MIN_MESSAGE_LENGTH}자 이상 입력해주세요.`);
       return;
     }
 
@@ -131,9 +135,18 @@ export default function SendScreen() {
         }}
         placeholder="예: 발표하는 모습이 멋있었어"
         multiline
+        maxLength={MAX_MESSAGE_LENGTH}
         error={messageError}
         style={{ minHeight: 92, textAlignVertical: "top" }}
       />
+      <View style={{ alignItems: "flex-end", marginTop: -4 }}>
+        <AppText
+          variant="caption"
+          tone={typedMessageLength >= MAX_MESSAGE_LENGTH ? "danger" : "muted"}
+        >
+          {typedMessageLength}/{MAX_MESSAGE_LENGTH}
+        </AppText>
+      </View>
 
       {sendStatus === "error" && sendError ? (
         <AppText tone="danger" selectable>
