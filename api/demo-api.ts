@@ -1,4 +1,5 @@
 import { createInitialFeed, demoSchoolmates } from "@/data/demo-seed";
+import { demoMessageRules } from "@/constants/demo-rules";
 import type {
   ApiMode,
   CreateSignalResponse,
@@ -93,17 +94,24 @@ export async function createSignal(
   await wait(520);
   ensureApiAvailable(mode);
 
-  const message = input.message.trim();
+  const message = input.message.replace(/\s+/g, " ").trim();
   const target = demoSchoolmates.find((user) => user.id === input.targetId);
 
   if (!target) {
     throw new DemoApiError("TARGET_NOT_FOUND", "선택한 친구를 찾을 수 없습니다.");
   }
 
-  if (message.length < 3) {
+  if (message.length < demoMessageRules.minLength) {
     throw new DemoApiError(
       "INVALID_MESSAGE",
-      "마음 메시지는 3자 이상 입력해주세요."
+      `마음 메시지는 ${demoMessageRules.minLength}자 이상 입력해주세요.`
+    );
+  }
+
+  if (message.length > demoMessageRules.maxLength) {
+    throw new DemoApiError(
+      "MESSAGE_TOO_LONG",
+      `마음 메시지는 ${demoMessageRules.maxLength}자 이하로 입력해주세요.`
     );
   }
 

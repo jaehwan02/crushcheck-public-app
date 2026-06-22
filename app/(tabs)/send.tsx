@@ -8,12 +8,10 @@ import { PrimaryButton } from "@/components/primary-button";
 import { SchoolmateRow } from "@/components/schoolmate-row";
 import { ScreenContainer } from "@/components/screen-container";
 import { StateView } from "@/components/state-view";
+import { demoMessageRules } from "@/constants/demo-rules";
 import { useSchoolmates } from "@/hooks/use-schoolmates";
 import { useAppStore } from "@/store/use-app-store";
 import type { Schoolmate } from "@/types/demo";
-
-const MIN_MESSAGE_LENGTH = 3;
-const MAX_MESSAGE_LENGTH = 80;
 
 export default function SendScreen() {
   const [searchText, setSearchText] = useState("");
@@ -43,8 +41,8 @@ export default function SendScreen() {
       return;
     }
 
-    if (trimmedMessage.length < MIN_MESSAGE_LENGTH) {
-      setValidationError(`마음 메시지는 ${MIN_MESSAGE_LENGTH}자 이상 입력해주세요.`);
+    if (trimmedMessage.length < demoMessageRules.minLength) {
+      setValidationError(`마음 메시지는 ${demoMessageRules.minLength}자 이상 입력해주세요.`);
       return;
     }
 
@@ -135,16 +133,16 @@ export default function SendScreen() {
         }}
         placeholder="예: 발표하는 모습이 멋있었어"
         multiline
-        maxLength={MAX_MESSAGE_LENGTH}
+        maxLength={demoMessageRules.maxLength}
         error={messageError}
         style={{ minHeight: 92, textAlignVertical: "top" }}
       />
       <View style={{ alignItems: "flex-end", marginTop: -4 }}>
         <AppText
           variant="caption"
-          tone={typedMessageLength >= MAX_MESSAGE_LENGTH ? "danger" : "muted"}
+          tone={typedMessageLength >= demoMessageRules.maxLength ? "danger" : "muted"}
         >
-          {typedMessageLength}/{MAX_MESSAGE_LENGTH}
+          {typedMessageLength}/{demoMessageRules.maxLength}
         </AppText>
       </View>
 
