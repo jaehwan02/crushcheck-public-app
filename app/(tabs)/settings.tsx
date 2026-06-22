@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { AppText } from "@/components/app-text";
 import { PrimaryButton } from "@/components/primary-button";
@@ -25,6 +25,42 @@ const modes: Array<{ value: ApiMode; label: string; description: string }> = [
   }
 ];
 
+type ModeOptionProps = {
+  label: string;
+  description: string;
+  selected: boolean;
+  onPress: () => void;
+};
+
+function ModeOption({ label, description, selected, onPress }: ModeOptionProps) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={({ pressed }) => ({
+        minHeight: 72,
+        borderWidth: 1,
+        borderColor: selected ? theme.color.primary : theme.color.border,
+        borderRadius: theme.radius.sm,
+        backgroundColor: pressed || selected ? theme.color.surfaceRaised : theme.color.surface,
+        padding: 14,
+        gap: 6
+      })}
+    >
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+        <AppText variant="subtitle">{label}</AppText>
+        {selected ? (
+          <AppText variant="caption" style={{ color: theme.color.primary, fontWeight: "700" }}>
+            선택됨
+          </AppText>
+        ) : null}
+      </View>
+      <AppText tone="muted">{description}</AppText>
+    </Pressable>
+  );
+}
+
 export default function SettingsScreen() {
   const demoMode = useAppStore((state) => state.demoMode);
   const setDemoMode = useAppStore((state) => state.setDemoMode);
@@ -42,10 +78,11 @@ export default function SettingsScreen() {
           const selected = demoMode === mode.value;
 
           return (
-            <PrimaryButton
+            <ModeOption
               key={mode.value}
               label={mode.label}
-              variant={selected ? "primary" : "secondary"}
+              description={mode.description}
+              selected={selected}
               onPress={() => setDemoMode(mode.value)}
             />
           );
